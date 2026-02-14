@@ -12,59 +12,104 @@
 
     <main class="app-container">
 
-        <!-- Visualizer Canvas -->
+        <!-- ── Visualizer ── -->
         <section class="visualizer-wrapper" aria-label="Audio Visualizer">
             <canvas id="visualizer-canvas"></canvas>
+
             <div class="station-label">
                 <span class="label-title">Focus Station</span>
                 <span class="label-status" id="status-text">Paused</span>
             </div>
-        </section>
 
-        <!-- Control Bar -->
-        <footer class="control-bar" role="region" aria-label="Playback Controls">
-
-            <!-- Play / Pause Button -->
-            <button class="play-btn" id="play-btn" aria-label="Play" aria-pressed="false">
-                <svg class="icon icon-play" id="icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                    fill="currentColor" aria-hidden="true">
-                    <path d="M8 5.14v14l11-7-11-7z" />
+            <!-- View toggle: top-right corner of canvas -->
+            <button class="view-toggle-btn" id="view-toggle-btn" aria-label="Toggle visualizer view"
+                aria-pressed="false">
+                <svg class="vt-icon vt-bars" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                    aria-hidden="true">
+                    <rect x="2" y="10" width="4" height="11" rx="1" />
+                    <rect x="8" y="6" width="4" height="15" rx="1" />
+                    <rect x="14" y="13" width="4" height="8" rx="1" />
+                    <rect x="20" y="3" width="4" height="18" rx="1" />
                 </svg>
-                <svg class="icon icon-pause" id="icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                    fill="currentColor" aria-hidden="true" style="display:none;">
-                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                <svg class="vt-icon vt-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"
+                    style="display:none;">
+                    <path d="M2 12 Q4 6 6 12 Q8 18 10 12 Q12 6 14 12 Q16 18 18 12 Q20 6 22 12" />
                 </svg>
             </button>
+        </section>
 
-            <!-- Volume Control -->
-            <div class="slider-group">
-                <label class="slider-label" for="volume-slider">
-                    <svg class="slider-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                        aria-hidden="true">
-                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
-                    </svg>
-                    Volume
-                </label>
-                <input type="range" id="volume-slider" class="slider" min="0" max="1" step="0.01" value="0.6"
-                    aria-label="Volume" />
+        <!-- ── Control Panel ── -->
+        <footer class="control-panel" role="region" aria-label="Playback Controls">
+
+            <!-- Row 1 — Presets -->
+            <div class="presets-row">
+                <span class="presets-label">Preset</span>
+                <div class="presets-group" role="group" aria-label="Noise presets">
+                    <button class="preset-btn" data-preset="deep" aria-label="Deep focus preset">Deep</button>
+                    <button class="preset-btn" data-preset="flow" aria-label="Flow state preset">Flow</button>
+                    <button class="preset-btn" data-preset="light" aria-label="Light background preset">Light</button>
+                </div>
             </div>
 
-            <!-- Color / Filter Control -->
-            <div class="slider-group">
-                <label class="slider-label" for="color-slider">
-                    <svg class="slider-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                        aria-hidden="true">
-                        <path d="M12 3a9 9 0 1 0 0 18A9 9 0 0 0 12 3zm0 2a7 7 0 0 1 0 14V5z" />
-                    </svg>
-                    Color
-                </label>
-                <input type="range" id="color-slider" class="slider color-slider" min="100" max="3500" step="10"
-                    value="400" aria-label="Noise Color (Low Pass Filter Frequency)" />
-            </div>
+            <!-- Row 2 — Main controls -->
+            <div class="control-bar">
 
+                <!-- Play / Pause -->
+                <button class="play-btn" id="play-btn" aria-label="Play" aria-pressed="false">
+                    <svg class="icon" id="icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        fill="currentColor" aria-hidden="true">
+                        <path d="M8 5.14v14l11-7-11-7z" />
+                    </svg>
+                    <svg class="icon" id="icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        fill="currentColor" aria-hidden="true" style="display:none;">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                    </svg>
+                </button>
+
+                <!-- Volume Slider -->
+                <div class="slider-group">
+                    <label class="slider-label" for="volume-slider">
+                        <svg class="slider-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
+                        </svg>
+                        Volume
+                    </label>
+                    <input type="range" id="volume-slider" class="slider" min="0" max="1" step="0.01" value="0.6"
+                        aria-label="Volume" />
+                </div>
+
+                <!-- Color (Filter) Slider -->
+                <div class="slider-group">
+                    <div class="slider-header">
+                        <label class="slider-label" for="color-slider">
+                            <svg class="slider-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                fill="currentColor" aria-hidden="true">
+                                <path d="M12 3a9 9 0 1 0 0 18A9 9 0 0 0 12 3zm0 2a7 7 0 0 1 0 14V5z" />
+                            </svg>
+                            Color
+                        </label>
+                        <span class="color-readout" id="color-readout">Warm Brown</span>
+                    </div>
+                    <input type="range" id="color-slider" class="slider color-slider" min="100" max="3500" step="10"
+                        value="400" aria-label="Noise color — controls low-pass filter frequency" />
+                </div>
+
+            </div>
         </footer>
 
     </main>
+
+    <!-- Error Overlay (hidden by default) -->
+    <div class="error-overlay" id="error-overlay" hidden role="alert" aria-live="assertive">
+        <div class="error-card">
+            <span class="error-icon" aria-hidden="true">⚠️</span>
+            <p class="error-message" id="error-message">Unable to start audio engine.</p>
+            <p class="error-sub">Try refreshing, or check that your browser supports the Web Audio API.</p>
+        </div>
+    </div>
 
     <script src="audio-engine.js" type="module"></script>
     <script src="app.js" type="module"></script>
