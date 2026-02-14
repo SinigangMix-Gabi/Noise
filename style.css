@@ -1,0 +1,284 @@
+/* =========================================================
+   RESET & CUSTOM PROPERTIES
+   ========================================================= */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg-deep: #0d0d0f;
+    --bg-surface: #15151a;
+    --bg-card: #1c1c24;
+    --border: rgba(255, 255, 255, 0.07);
+
+    --accent-warm: #c8824a;
+    /* brown-orange */
+    --accent-glow: #e09a60;
+    --accent-cool: #5a82b4;
+    /* blue end of color slider */
+
+    --text-primary: #ede8e0;
+    --text-muted: #6e6a62;
+
+    --bar-height: 96px;
+    --radius-lg: 20px;
+    --radius-md: 12px;
+    --radius-pill: 999px;
+
+    --transition: 0.25s ease;
+}
+
+html,
+body {
+    height: 100%;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+}
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+
+/* =========================================================
+   VISUALIZER
+   ========================================================= */
+.visualizer-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 60%, #1e1410 0%, var(--bg-deep) 70%);
+}
+
+#visualizer-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.92;
+}
+
+.station-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    user-select: none;
+    text-align: center;
+}
+
+.label-title {
+    font-size: clamp(1.6rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    text-shadow: 0 0 40px rgba(200, 130, 74, 0.35);
+}
+
+.label-status {
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color var(--transition);
+}
+
+.label-status.active {
+    color: var(--accent-warm);
+}
+
+/* =========================================================
+   CONTROL BAR
+   ========================================================= */
+.control-bar {
+    height: var(--bar-height);
+    background: rgba(21, 21, 26, 0.85);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 4vw, 56px);
+    padding: 0 clamp(20px, 5vw, 60px);
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   PLAY BUTTON
+   ========================================================= */
+.play-btn {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: var(--radius-pill);
+    border: none;
+    background: var(--accent-warm);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition:
+        background var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+    box-shadow: 0 0 0 0 rgba(200, 130, 74, 0);
+    outline: none;
+}
+
+.play-btn:hover {
+    background: var(--accent-glow);
+    transform: scale(1.08);
+    box-shadow: 0 0 28px rgba(200, 130, 74, 0.45);
+}
+
+.play-btn:active {
+    transform: scale(0.95);
+}
+
+.play-btn[aria-pressed="true"] {
+    background: var(--bg-card);
+    border: 1.5px solid var(--accent-warm);
+    color: var(--accent-glow);
+    box-shadow: 0 0 22px rgba(200, 130, 74, 0.2);
+}
+
+.icon {
+    width: 26px;
+    height: 26px;
+}
+
+/* =========================================================
+   SLIDERS
+   ========================================================= */
+.slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    max-width: 260px;
+    min-width: 120px;
+}
+
+.slider-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    user-select: none;
+}
+
+.slider-icon {
+    width: 13px;
+    height: 13px;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+/* --- Range Track & Thumb (cross-browser) --- */
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    border-radius: var(--radius-pill);
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    /* filled track via CSS custom property set by JS */
+    background-image: linear-gradient(to right,
+            var(--accent-warm) 0%,
+            var(--accent-warm) var(--fill, 60%),
+            rgba(255, 255, 255, 0.08) var(--fill, 60%));
+    transition: background-image 0.05s;
+}
+
+.color-slider {
+    background-image: linear-gradient(to right,
+            var(--accent-warm) 0%,
+            var(--accent-warm) var(--fill, 9%),
+            rgba(255, 255, 255, 0.08) var(--fill, 9%));
+}
+
+/* Webkit thumb */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.slider::-webkit-slider-thumb:hover {
+    transform: scale(1.25);
+    box-shadow: 0 0 0 4px rgba(200, 130, 74, 0.25);
+}
+
+/* Firefox thumb */
+.slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* =========================================================
+   UTILITY — fade in on load
+   ========================================================= */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.app-container {
+    animation: fadeUp 0.6s ease both;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 480px) {
+    .control-bar {
+        gap: 12px;
+    }
+
+    .slider-group {
+        min-width: 80px;
+    }
+}
